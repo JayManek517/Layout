@@ -51,7 +51,7 @@ export const BreadcrumbsRoot = styled('div')(({ theme }) => ({
 }));
 
 export const BreadcrumbsHeading = styled('h6')(({ theme }) => ({
-  ...theme.typography.h5,
+  ...theme.typography.h4,
   margin: 0,
   padding: 0,
   fontWeight: 700,
@@ -81,7 +81,9 @@ export const BreadcrumbsSeparator = styled('span')(({ theme }) => ({
   width: 4,
   height: 4,
   borderRadius: '50%',
-  backgroundColor: theme.palette.text.disabled,
+  backgroundColor: theme.palette.text.primary,
+  marginRight: '5px',
+  marginLeft: '5px',
 }));
 
 export const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
@@ -98,7 +100,7 @@ export const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
 
 export const StyledLink = styled('a')(({ theme }) => ({
   ...theme.typography.body2,
-  color: theme.palette.text.secondary,
+  color: theme.palette.text.primary,
   textDecoration: 'none',
 
   '&:hover': {

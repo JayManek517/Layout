@@ -98,8 +98,6 @@
 import type { Theme, SxProps } from '@mui/material/styles';
 import type { BreadcrumbsProps } from '@mui/material/Breadcrumbs';
 
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-
 import {
   StyledLink,
   BreadcrumbsRoot,
@@ -108,6 +106,7 @@ import {
   BreadcrumbsContent,
   StyledDisabledLink,
   BreadcrumbsContainer,
+  BreadcrumbsSeparator,
 } from './styles';
 
 export type BreadcrumbsLinkProps = {
@@ -161,10 +160,7 @@ export function CustomBreadcrumbs({
 
   const renderLinks = () =>
     slots?.breadcrumbs ?? (
-      <StyledBreadcrumbs
-        separator={<KeyboardArrowRightIcon fontSize="small" />}
-        {...slotProps?.breadcrumbs}
-      >
+      <StyledBreadcrumbs separator={<BreadcrumbsSeparator />} {...slotProps?.breadcrumbs}>
         {links.map((link, index) => {
           const isLast = link.name === lastLink;
           const isDisabled = isLast && !activeLast;

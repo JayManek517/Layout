@@ -1,18 +1,20 @@
+import { useState } from 'react';
 import { varAlpha } from 'minimal-shared/utils';
 
 import EmailIcon from '@mui/icons-material/Email';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, Button, useTheme, Typography } from '@mui/material';
+import { Box, Button, useTheme, MenuItem, TextField, Typography } from '@mui/material';
 
 import { Iconify } from '../iconify';
-
 
 interface Props {
   selectedCount: number;
   total: number;
+  onDelete: () => void
 }
-const FooterAction = ({ selectedCount, total }: Props) => {
+const FooterAction = ({ selectedCount, total, onDelete }: Props) => {
   const theme = useTheme();
+  const [rowOption, setRowOption] = useState('');
   return (
     <Box
       sx={{
@@ -65,9 +67,35 @@ const FooterAction = ({ selectedCount, total }: Props) => {
           >
             Send Email
           </Button>
-          <Button variant="soft" color="error" sx={{ fontWeight: 400 }} startIcon={<DeleteIcon />}>
+          <Button variant="soft" color="error" sx={{ fontWeight: 400 }} startIcon={<DeleteIcon />} onClick={onDelete}>
             Delete
           </Button>
+          <TextField
+            select
+            value={rowOption}
+            onChange={(e) => setRowOption(e.target.value)}
+            size="medium"
+            label="Record Option"
+            sx={{
+              width: '10rem',
+              '& .MuiOutlinedInput-root': {
+                height: '2.4rem',
+                paddingRight: '1rem',
+              },
+              '&.MuiTextField-root .MuiInputLabel-root': {
+                top: '-7px',
+              },
+              '& .MuiSelect-select': {
+                display: 'flex',
+                alignItems: 'center',
+                paddingTop: '0.5rem',
+                paddingBottom: '0.5rem',
+              },
+            }}
+          >
+            <MenuItem value="all">Select all page rows</MenuItem>
+            <MenuItem value="clear">Clear all page rows</MenuItem>
+          </TextField>
         </Box>
       )}
     </Box>

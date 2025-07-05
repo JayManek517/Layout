@@ -1,4 +1,3 @@
-// components/DynamicFilterDrawer.tsx
 import React, { useState, useEffect } from 'react';
 
 import {
@@ -78,7 +77,7 @@ const DynamicFilterDrawer: React.FC<Props> = ({
             flexWrap: 'wrap',
             display: 'flex',
             justifyContent: 'center',
-                      flexDirection: 'column',
+            flexDirection: 'column',
           }}
         >
           {fields.map((field) => (

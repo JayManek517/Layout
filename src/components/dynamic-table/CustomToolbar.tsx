@@ -1,178 +1,89 @@
-// import type { ReactElement } from 'react';
-// import type { SxProps} from '@mui/material';
+import type {
+  GridRowSelectionModel} from '@mui/x-data-grid';
 
-// import AddIcon from '@mui/icons-material/Add';
-// import ManageSearchIcon from '@mui/icons-material/ManageSearch';
-// import { Box, Button, Divider, useTheme, Typography } from '@mui/material';
-// import {
-//   GridToolbarExport,
-//   GridToolbarContainer,
-//   GridToolbarQuickFilter,
-//   GridToolbarColumnsButton,
-// } from '@mui/x-data-grid'
-
-// const CustomToolbar = ({
-//   rowCount,
-//   onCreateClick,
-//   title,
-//   createSx,
-//   titleSx,
-//   icon,
-// }: {
-//   rowCount: number;
-//   onCreateClick: () => void;
-//   title?: string;
-//   createSx?: SxProps;
-//   titleSx?: SxProps;
-//   icon?: ReactElement;
-// }) => {
-//   const theme = useTheme();
-
-//   return (
-//     <GridToolbarContainer
-//       sx={{
-//         display: 'flex',
-//         flexDirection: 'column',
-//         width: '100%',
-//         alignItems: 'normal',
-//         p: 0,
-//       }}
-//     >
-//       <Box
-//         sx={{
-//           display: 'flex',
-//           justifyContent: 'space-between',
-//           alignItems: 'center',
-//           flexWrap: 'wrap',
-//           mt: 1,
-//         }}
-//       >
-//         <Box
-//           sx={{
-//             display: 'flex',
-//             alignItems: 'center',
-//             gap: 1,
-//             flexWrap: 'wrap',
-//           }}
-//         >
-//           {icon ? (
-//             icon
-//           ) : (
-//             <ManageSearchIcon sx={{ color: theme.palette.text.secondary, height: '2rem' }} />
-//           )}
-//           <Typography
-//             variant="h6"
-//             sx={{
-//               ...titleSx,
-//               color: theme.palette.text.secondary,
-//               fontWeight: 'bold',
-//             }}
-//           >
-//             {title ? title : 'List'} ({rowCount})
-//           </Typography>
-//         </Box>
-
-//         <Box
-//           sx={{
-//             display: 'flex',
-//             alignItems: 'center',
-//             gap: 1,
-//             flexWrap: 'wrap',
-//           }}
-//         >
-//           <GridToolbarQuickFilter
-//             sx={{
-//               '& .MuiInputBase-root': {
-//                 borderRadius: '8px',
-//                 padding: '6px 10px',
-//               },
-//               '& input': {
-//                 fontSize: '14px',
-//                 color: '#333',
-//               },
-//               '.MuiOutlinedInput-notchedOutline': {
-//                 borderRadius: '8px',
-//               },
-//             }}
-//           />
-//           <Button
-//             variant="outlined"
-//             color="inherit"
-//             sx={{
-//               fontSize: '0.875rem',
-//               display: 'flex',
-//               alignItems: 'center',
-//               height: '2.4rem',
-//             }}
-//           >
-//             <GridToolbarColumnsButton />
-//           </Button>
-
-//           <Button
-//             variant="outlined"
-//             color="inherit"
-//             sx={{
-//               fontSize: '0.875rem',
-//               display: 'flex',
-//               alignItems: 'center',
-//               height: '2.4rem',
-//             }}
-//           >
-//             <GridToolbarExport />
-//           </Button>
-
-//           <Button
-//             startIcon={<AddIcon />}
-//             onClick={onCreateClick}
-//             variant="contained"
-//             color="info"
-//             sx={{
-//               ...createSx,
-//               fontSize: '0.875rem',
-//               display: 'flex',
-//               alignItems: 'center',
-//               height: '2.4rem',
-//             }}
-//           >
-//             Create
-//           </Button>
-//         </Box>
-//       </Box>
-//       <Divider sx={{ mb: 2 }} />
-//     </GridToolbarContainer>
-//   );
-// };
-
-// export default CustomToolbar;
-
+import { useState } from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { Box, Button, useTheme, IconButton, Typography } from '@mui/material';
+import { Box, Menu, Button, useTheme, MenuItem, IconButton, Typography } from '@mui/material';
 import {
-  GridToolbarExport,
   GridToolbarContainer,
   GridToolbarQuickFilter,
-  GridToolbarColumnsButton,
+  GridToolbarColumnsButton
 } from '@mui/x-data-grid';
 
+import { Iconify } from '../iconify';
 import { StyledButton, StyledButtonBox } from './Styles';
+
+import type { StaffData } from './types';
 
 interface CustomToolbarProps {
   onOpenFilter: (open: boolean) => void;
   onAddNew: () => void;
+  onExport: () => void;
   filterValues: Record<string, any>;
   setFilterValues: (filters: Record<string, any>) => void;
+  selectionModel: GridRowSelectionModel;
+  setSelectionModel: React.Dispatch<React.SetStateAction<GridRowSelectionModel>>;
+  rows: StaffData[];
 }
 
 const CustomToolbar = ({
   onOpenFilter,
   onAddNew,
+  onExport,
   filterValues,
   setFilterValues,
+  selectionModel,
+  setSelectionModel,
+  rows,
 }: CustomToolbarProps) => {
   const theme = useTheme();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSelectAll = () => {
+    setSelectionModel(rows.map((r: any) => r.specializationID));
+    handleClose();
+  };
+
+  const handleInvertSelection = () => {
+    const allIds = rows.map((r: any) => r.specializationID);
+    const inverted = allIds.filter((id: any) => !selectionModel.includes(id));
+    setSelectionModel(inverted);
+    handleClose();
+  };
+
+  const handleClear = () => {
+    setSelectionModel([]);
+    handleClose();
+  };
+
+  const handleOdd = () => {
+    const odd = rows
+      .filter((_: any, index: number) => index % 2 === 0)
+      .map((r: any) => r.specializationID);
+    setSelectionModel(odd);
+    handleClose();
+  };
+
+  const handleEven = () => {
+    const even = rows
+      .filter((_: any, index: number) => index % 2 !== 0)
+      .map((r: any) => r.specializationID);
+    setSelectionModel(even);
+    handleClose();
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
@@ -206,28 +117,31 @@ const CustomToolbar = ({
         />
         <Box sx={{ flexGrow: 1 }} />
 
-        {/* <Box
-          sx={{
-            borderRadius: 1,
-            px: 1.5,
-            py: 0.3,
-            bgcolor: varAlpha(theme.vars.palette.grey['200Channel']),
-            fontWeight: 400,
-            '&:hover': {
-              bgcolor: varAlpha(theme.vars.palette.grey['300Channel']),
-            },
-          }}
-        >
-          <GridToolbarColumnsButton />
-        </Box> */}
+        {selectionModel.length > 0 && (
+          <>
+            <StyledButton
+              startIcon={<Iconify icon="fluent:row-triple-20-filled" />}
+              onClick={handleClick}
+            >
+              Rows
+            </StyledButton>
+            <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+              <MenuItem onClick={handleSelectAll}>Select All</MenuItem>
+              <MenuItem onClick={handleInvertSelection}>Invert Selection</MenuItem>
+              <MenuItem onClick={handleClear}>Clear Selection</MenuItem>
+              <MenuItem onClick={handleOdd}>Select Odd Rows</MenuItem>
+              <MenuItem onClick={handleEven}>Select Even Rows</MenuItem>
+            </Menu>
+          </>
+        )}
 
         <StyledButtonBox>
           <GridToolbarColumnsButton />
         </StyledButtonBox>
 
-        <StyledButtonBox>
-          <GridToolbarExport />
-        </StyledButtonBox>
+        <StyledButton startIcon={<Iconify icon="solar:export-bold" />} onClick={onExport}>
+          Export
+        </StyledButton>
 
         <StyledButton startIcon={<FilterListIcon />} onClick={() => onOpenFilter(false)}>
           Filter
