@@ -1,20 +1,27 @@
-import type {
-  GridRowSelectionModel} from '@mui/x-data-grid';
+import type { GridRowSelectionModel } from '@mui/x-data-grid';
 
 import { useState } from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { Box, Menu, Button, useTheme, MenuItem, IconButton, Typography } from '@mui/material';
+import {
+  Box,
+  Menu,
+  Button,
+  useTheme,
+  MenuItem,
+  IconButton,
+  Typography,
+  ButtonGroup,
+} from '@mui/material';
 import {
   GridToolbarContainer,
   GridToolbarQuickFilter,
-  GridToolbarColumnsButton
+  GridToolbarColumnsButton,
 } from '@mui/x-data-grid';
 
 import { Iconify } from '../iconify';
-import { StyledButton, StyledButtonBox } from './Styles';
 
 import type { StaffData } from './types';
 
@@ -52,6 +59,17 @@ const CustomToolbar = ({
     setAnchorEl(null);
   };
 
+  const [exportAnchorEl, setExportAnchorEl] = useState<null | HTMLElement>(null);
+  const exportMenuOpen = Boolean(exportAnchorEl);
+
+  const handleExportClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setExportAnchorEl(event.currentTarget);
+  };
+
+  const handleExportClose = () => {
+    setExportAnchorEl(null);
+  };
+
   const handleSelectAll = () => {
     setSelectionModel(rows.map((r: any) => r.specializationID));
     handleClose();
@@ -69,22 +87,6 @@ const CustomToolbar = ({
     handleClose();
   };
 
-  const handleOdd = () => {
-    const odd = rows
-      .filter((_: any, index: number) => index % 2 === 0)
-      .map((r: any) => r.specializationID);
-    setSelectionModel(odd);
-    handleClose();
-  };
-
-  const handleEven = () => {
-    const even = rows
-      .filter((_: any, index: number) => index % 2 !== 0)
-      .map((r: any) => r.specializationID);
-    setSelectionModel(even);
-    handleClose();
-  };
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
       <GridToolbarContainer
@@ -92,17 +94,24 @@ const CustomToolbar = ({
           display: 'flex',
           justifyContent: 'flex-end',
           gap: 1.5,
-          py: 1,
+          pb: 2,
+          pt: 0,
           px: 2,
           flexWrap: 'wrap',
         }}
       >
         <GridToolbarQuickFilter
           sx={{
+            '.MuiDataGrid-root .MuiTextField-root': {
+              height: '36px !important',
+            },
             '& .MuiInputBase-root': {
               borderRadius: '8px',
               padding: '6px 10px',
+              backgroundColor: '#EAECEE',
+              height: '36px !important',
             },
+
             '& input': {
               fontSize: '14px',
               color: '#333',
@@ -111,47 +120,108 @@ const CustomToolbar = ({
               borderRadius: '8px',
             },
             '&.MuiTextField-root': {
-              height: '2rem !important',
+              height: '36px !important',
             },
           }}
         />
         <Box sx={{ flexGrow: 1 }} />
 
-        {selectionModel.length > 0 && (
-          <>
-            <StyledButton
-              startIcon={<Iconify icon="fluent:row-triple-20-filled" />}
-              onClick={handleClick}
-            >
-              Rows
-            </StyledButton>
-            <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-              <MenuItem onClick={handleSelectAll}>Select All</MenuItem>
-              <MenuItem onClick={handleInvertSelection}>Invert Selection</MenuItem>
-              <MenuItem onClick={handleClear}>Clear Selection</MenuItem>
-              <MenuItem onClick={handleOdd}>Select Odd Rows</MenuItem>
-              <MenuItem onClick={handleEven}>Select Even Rows</MenuItem>
-            </Menu>
-          </>
-        )}
+        <ButtonGroup
+          variant="soft"
+          sx={{
+            backgroundColor: '#EAECEE',
+            border: '1px solid #c0d6ec',
+            py: '0',
+            '& .MuiButton-root': {
+              backgroundColor: 'transparent',
+              color: '#000',
+              height: '36px',
+              '&:hover': {
+                backgroundColor: '#D9DDE2',
+              },
+            },
+            '& .MuiButtonGroup-grouped:not(:last-of-type)': {
+              borderRight: '1px solid #c0d6ec',
+            },
+          }}
+        >
+          <Button
+            startIcon={
+              <Iconify icon="fluent:task-list-square-add-20-filled" sx={{ color: '#637381' }} />
+            }
+            onClick={handleClick}
+            sx={{ fontWeight: 400 }}
+          >
+            Rows
+          </Button>
+          <Button
+            sx={{
+              backgroundColor: 'transparent',
+              color: '#000',
+              px: '5px',
+              borderRight: 'none',
 
-        <StyledButtonBox>
-          <GridToolbarColumnsButton />
-        </StyledButtonBox>
+              '&:hover': {
+                backgroundColor: '#d0e4f7',
+              },
+              '& .MuiSvgIcon-root': {
+                color: '#637381',
+              },
+              '&.MuiButton-root .MuiButton-sizeSmall': {
+                borderRight: '0px',
+                px: '6px',
+                fontWeight: '400 !important',
+              },
+            }}
+          >
+            <GridToolbarColumnsButton />
+          </Button>
+          <Button
+            startIcon={<Iconify icon="solar:export-bold" sx={{ color: '#637381' }} />}
+            onClick={handleExportClick}
+            sx={{ fontWeight: 400 }}
+          >
+            Export
+          </Button>
+          <Button
+            startIcon={<FilterListIcon sx={{ color: '#637381' }} />}
+            onClick={() => onOpenFilter(false)}
+            sx={{ fontWeight: 400 }}
+          >
+            Filter
+          </Button>
+        </ButtonGroup>
 
-        <StyledButton startIcon={<Iconify icon="solar:export-bold" />} onClick={onExport}>
-          Export
-        </StyledButton>
+        <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+          <MenuItem onClick={handleSelectAll}>Select All</MenuItem>
+          <MenuItem onClick={handleClear}>Clear Selection</MenuItem>
+          <MenuItem onClick={handleInvertSelection}>Invert Selection</MenuItem>
+        </Menu>
 
-        <StyledButton startIcon={<FilterListIcon />} onClick={() => onOpenFilter(false)}>
-          Filter
-        </StyledButton>
+        <Menu anchorEl={exportAnchorEl} open={exportMenuOpen} onClose={handleExportClose}>
+          <MenuItem
+            onClick={() => {
+              handleExportClose();
+              console.log('Exporting to PDF');
+            }}
+          >
+            Export as PDF
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleExportClose();
+              console.log('Exporting to Excel');
+            }}
+          >
+            Export as Excel
+          </MenuItem>
+        </Menu>
 
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          color="primary"
-          sx={{ textTransform: 'none', fontSize: 14 }}
+          color="success"
+          sx={{ textTransform: 'none', fontSize: 14, fontWeight: '400' }}
           onClick={onAddNew}
         >
           Add New

@@ -21,6 +21,7 @@ import DynamicFilterDrawer from './DynamicFilterDrawer';
 import { dataGridStyles, StyledFooterBox } from './Styles';
 
 import type { List, StaffData, FilterField, DynamicFormSchemaType } from './types';
+import { ConfirmDialogWithoutHeading } from '../custom-dialog/confirm-dialog-without-heading';
 
 const DynamicTable = () => {
   const [rows, setRows] = useState<StaffData[]>([]);
@@ -166,6 +167,7 @@ const DynamicTable = () => {
   const handleExport = () => {
     window.alert('export clicked');
   };
+
   const onAddNew = () => {
     setFormInitialData({});
     setIsEditMode(false);
@@ -177,7 +179,7 @@ const DynamicTable = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', p: 1.5, width: '100%' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', p: 2, width: '100%' }}>
       <DataGrid
         rows={rows}
         rowCount={totalCount}
@@ -246,10 +248,9 @@ const DynamicTable = () => {
         isEditMode={isEditMode}
       />
 
-      <ConfirmDialog
+      <ConfirmDialogWithoutHeading
         open={openDelete}
         onClose={() => setOpenDelete(false)}
-        title="Delete"
         content="Are you sure want to delete this record?"
         action={
           <Button
