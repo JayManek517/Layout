@@ -10,11 +10,11 @@ import { Iconify } from '../iconify';
 interface Props {
   selectedCount: number;
   total: number;
-  onDelete: () => void
+  onDelete: () => void;
 }
 const FooterAction = ({ selectedCount, total, onDelete }: Props) => {
   const theme = useTheme();
-  const [rowOption, setRowOption] = useState('');
+  //const [rowOption, setRowOption] = useState('');
   return (
     <Box
       sx={{
@@ -31,73 +31,83 @@ const FooterAction = ({ selectedCount, total, onDelete }: Props) => {
         },
       }}
     >
-      <Typography variant="body2">
-        Total Rows: {total} | Selected: {selectedCount}
+      <Typography variant="body2" sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        Total Rows:
+        <Typography variant="body2">{total}</Typography>| Selected:
+        <Typography variant="body1" sx={{ fontWeight: 'bold', color: '#078dee' }}>
+          {selectedCount}
+        </Typography>
       </Typography>
-      {selectedCount > 0 && (
-        <Box
+      {/* {selectedCount > 0 && ( */}
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 1,
+          flexWrap: 'wrap',
+        }}
+      >
+        <Button
           sx={{
-            display: 'flex',
-            gap: 1,
-            flexWrap: 'wrap',
+            bgcolor: varAlpha(theme.vars.palette.grey['200Channel']),
+            fontWeight: 400,
+            '&:hover': {
+              bgcolor: varAlpha(theme.vars.palette.grey['300Channel']),
+            },
+          }}
+          startIcon={<Iconify icon="lucide:edit" />}
+        >
+          Bulk Update
+        </Button>
+        <Button
+          sx={{
+            bgcolor: varAlpha(theme.vars.palette.grey['200Channel']),
+            px: 2,
+            fontWeight: 400,
+            '&:hover': {
+              bgcolor: varAlpha(theme.vars.palette.grey['300Channel']),
+            },
+          }}
+          startIcon={<EmailIcon />}
+        >
+          Send Email
+        </Button>
+        <Button
+          variant="soft"
+          color="error"
+          sx={{ fontWeight: 400 }}
+          startIcon={<DeleteIcon />}
+          onClick={onDelete}
+        >
+          Delete
+        </Button>
+        {/* <TextField
+          select
+          value={rowOption}
+          onChange={(e) => setRowOption(e.target.value)}
+          size="medium"
+          label="Record Option"
+          sx={{
+            width: '10rem',
+            '& .MuiOutlinedInput-root': {
+              height: '2.4rem',
+              paddingRight: '1rem',
+            },
+            '&.MuiTextField-root .MuiInputLabel-root': {
+              top: '-7px',
+            },
+            '& .MuiSelect-select': {
+              display: 'flex',
+              alignItems: 'center',
+              paddingTop: '0.5rem',
+              paddingBottom: '0.5rem',
+            },
           }}
         >
-          <Button
-            sx={{
-              bgcolor: varAlpha(theme.vars.palette.grey['200Channel']),
-              fontWeight: 400,
-              '&:hover': {
-                bgcolor: varAlpha(theme.vars.palette.grey['300Channel']),
-              },
-            }}
-            startIcon={<Iconify icon="lucide:edit" />}
-          >
-            Bulk Update
-          </Button>
-          <Button
-            sx={{
-              bgcolor: varAlpha(theme.vars.palette.grey['200Channel']),
-              px: 2,
-              fontWeight: 400,
-              '&:hover': {
-                bgcolor: varAlpha(theme.vars.palette.grey['300Channel']),
-              },
-            }}
-            startIcon={<EmailIcon />}
-          >
-            Send Email
-          </Button>
-          <Button variant="soft" color="error" sx={{ fontWeight: 400 }} startIcon={<DeleteIcon />} onClick={onDelete}>
-            Delete
-          </Button>
-          <TextField
-            select
-            value={rowOption}
-            onChange={(e) => setRowOption(e.target.value)}
-            size="medium"
-            label="Record Option"
-            sx={{
-              width: '10rem',
-              '& .MuiOutlinedInput-root': {
-                height: '2.4rem',
-                paddingRight: '1rem',
-              },
-              '&.MuiTextField-root .MuiInputLabel-root': {
-                top: '-7px',
-              },
-              '& .MuiSelect-select': {
-                display: 'flex',
-                alignItems: 'center',
-                paddingTop: '0.5rem',
-                paddingBottom: '0.5rem',
-              },
-            }}
-          >
-            <MenuItem value="all">Select all page rows</MenuItem>
-            <MenuItem value="clear">Clear all page rows</MenuItem>
-          </TextField>
-        </Box>
-      )}
+          <MenuItem value="all">Select all page rows</MenuItem>
+          <MenuItem value="clear">Clear all page rows</MenuItem>
+        </TextField> */}
+      </Box>
+      {/* )} */}
     </Box>
   );
 };

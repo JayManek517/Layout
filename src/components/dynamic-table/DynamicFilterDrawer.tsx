@@ -115,12 +115,18 @@ const DynamicFilterDrawer: React.FC<Props> = ({
         <Button
           variant="contained"
           fullWidth
-          sx={{ bgcolor: theme.palette.info.dark, borderRadius: 0 }}
+          sx={{ bgcolor: theme.palette.info.dark, borderRadius: 0, height: '3rem' }}
           onClick={() => onApply(values)}
         >
           Apply
         </Button>
-        <Button variant="soft" fullWidth color="inherit" sx={{ borderRadius: 0 }} onClick={onClose}>
+        <Button
+          variant="soft"
+          fullWidth
+          color="inherit"
+          sx={{ borderRadius: 0, height: '3rem' }}
+          onClick={onClose}
+        >
           Cancel
         </Button>
       </Box>

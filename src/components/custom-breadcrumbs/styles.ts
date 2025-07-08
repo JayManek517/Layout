@@ -44,10 +44,9 @@ import { styled } from '@mui/material/styles';
 // ----------------------------------------------------------------------
 
 export const BreadcrumbsRoot = styled('div')(({ theme }) => ({
-  
   display: 'flex',
   flexDirection: 'column',
-  padding: theme.spacing(2, 3),
+  padding: theme.spacing(2, 0),
 }));
 
 export const BreadcrumbsHeading = styled('h6')(({ theme }) => ({
@@ -105,7 +104,7 @@ export const StyledLink = styled('a')(({ theme }) => ({
 
   '&:hover': {
     textDecoration: 'underline',
-    color:theme.palette.primary.main
+    color: theme.palette.primary.main,
   },
 }));
 
